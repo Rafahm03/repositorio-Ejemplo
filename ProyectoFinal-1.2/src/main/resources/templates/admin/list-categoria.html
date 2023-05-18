@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title></title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<style type="text/css">
+      body {
+            color: white;
+            width: 100%;
+            background-color: black;
+        }
+
+        .cabecera {
+            background-color: darkolivegreen;
+            width: 100%;
+        }
+
+        .menu {
+            width: 100%;
+            display: inline-flex;
+        }
+
+        .menu div {
+            width: 100%;
+            border-radius: none;
+            justify-content: space-evenly;
+        }
+
+        /*.carrusel{
+          overflow: hidden;
+        }*/
+        footer {
+            padding-top: 20%;
+            width: 100%;
+            background-color: darkgrey;
+        }
+
+        main {
+			width: 100%;
+			padding-left: 10%;
+            padding-right: 10%;
+            padding-bottom: 10%;
+            position: center;
+            padding-top: 10%;
+        }
+    </style>
+</head>
+<body>
+		<header>
+        <div class="cabecera">
+          <nav class="navbar navbar-expand-sm navbar-success ">
+            <div class="container-fluid">
+				<form class="d-flex col-md-6">
+					<a class="navbar-brand" href="main.html" th:href="@{/}"> <img src="https://dcassetcdn.com/design_img/249304/126571/126571_2457630_249304_image.jpg" alt="logo" style="width: 15%;"> </a>	
+				</form>
+	            <form class="d-flex col-md-12">
+	                <a class="navbar-brand" href="../admin.html" th:href="@{/admin/}"> <button class="btn btn-dark" type="button"><svg
+	                      xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+	                      class="bi bi-person-gear" viewBox="0 0 16 16">
+	                      <path
+	                        d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382l.045-.148ZM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z" />
+	                    </svg></button> Administrador</a>
+	             </form>
+            </div>
+            </nav>
+        </div>
+      </header>
+      <main>
+		  <div class="container">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-8">
+				<div class="alert alert-warning alert-dismissible" role="alert"
+					th:if="${param.error}">
+					<button type="button" class="close" data-dismiss="alert"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<span>Error no se pueden añadir categorias que tengan productos ya asociados</span>
+				</div>
+				<div class="pull-right">
+					<a href="form-categoria.html" th:href="@{/admin/categoria/nueva/}"
+						class="btn btn-primary">Nueva categoría</a>
+
+				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Imagen</th>
+							<th>Nombre</th>
+							<th>Operaciones</th>
+						</tr>
+					</thead>
+					<tbody>		
+						<tr th:each="categoria : ${categorias}">
+							<td><img
+								th:src="${not (#strings.isEmpty(categoria.imagen))} ? ${categoria.imagen} : 'http://placehold.it/48x48'"
+								class="img-responsive icono-categoria" alt="imagen" /></td>
+							<td th:text="${categoria.nombre}"></td>
+							<td class="operaciones"><a href="#"
+								th:href="@{/admin/categoria/editar/{id}(id=${categoria.id})}"
+								class="btn btn-primary">Editar</a>
+								<button type="button" class="btn btn-danger" data-toggle="modal"
+									data-target="#delete-modal" th:data-id="${categoria.id}">Borrar</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Borrar categoría</h4>
+				</div>
+				<div class="modal-body">
+					<p>¿Está usted seguro de borrar esta categoría?</p>
+					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+					<a href="/admin/categoria/borrar/" class="btn btn-danger">Sí</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	  </main>
+	<footer class="bg-dark py-3">
+        <div class="container text-center">
+			<a href="../main.html" th:href="@{/}" class="btn btn-danger btn-lg btn-block">Salir del modo Administrador</a>
+        </div>
+    </footer>
+
+
+</body>
+</html>
